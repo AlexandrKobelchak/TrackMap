@@ -49,7 +49,7 @@ namespace TrackMap.WebApp
             using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
             {
                 var context = serviceScope.ServiceProvider.GetRequiredService<AppDataContext>();
-                context.Database.EnsureDeleted();
+                //context.Database.EnsureDeleted();
                 context.Database.EnsureCreated();
 
                 serviceScope.ServiceProvider.GetRequiredService<QuickTourTrackService>().Start();          

@@ -1,4 +1,5 @@
 ﻿using Domain;
+using Microsoft.Extensions.DependencyInjection;
 using System.Net;
 using System.Net.Sockets;
 
@@ -6,15 +7,15 @@ namespace TrackService
 {
     public abstract class TrackService:ITrackService
     {
-        public IPAddress Addr { set; protected get; }
-        public int Port { set; protected get; }
+        public IPAddress Addr { set; protected get; } = IPAddress.Any;
+        public int Port { set; protected get; } = 0;
         public abstract void SaveData(byte[] buffer, int received);
 
-        protected AppDataContext _context;
+        protected readonly IServiceScopeFactory _serviceScopeFactory;
 
-        protected TrackService(AppDataContext context)
+        protected TrackService(IServiceScopeFactory factory)
         {
-            _context = context;
+            _serviceScopeFactory = factory;
         }
 
         public void Start()

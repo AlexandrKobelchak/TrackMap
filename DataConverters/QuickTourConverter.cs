@@ -21,12 +21,6 @@ namespace DataConverters
 
         private GeoPosition ConvertFromBinary(byte[] rawData, int length)
         {
-            string longitudeStr = $"{rawData[17]:X2}{rawData[18]:X2}{rawData[19]:X2}{rawData[20]:X2}{rawData[21]:X2}";
-            double longitude;
-            if (Double.TryParse(longitudeStr.TrimEnd('E', 'W'), out longitude))
-            {
-                longitude /= 10000.0;
-            }
             return new GeoPosition()
             {
                 DeviceId = Int64.Parse($"{rawData[1]:X2}{rawData[2]:X2}{rawData[3]:X2}{rawData[4]:X2}{rawData[5]:X2}"),
@@ -38,9 +32,41 @@ namespace DataConverters
                 Int32.Parse(rawData[7].ToString("X2")),
                 Int32.Parse(rawData[8].ToString("X2"))
                 ).ToLocalTime(),
-                Latitude = Double.Parse($"{rawData[12]:X2}{rawData[13]:X2}.{rawData[14]:X2}{rawData[15]:X2}"),
-                Longitude = longitude
+                Latitude = GetLatitude(rawData[12], rawData[13], rawData[14], rawData[15], rawData[16]),
+                Longitude = GetLongitude(rawData[17], rawData[18], rawData[19], rawData[20], rawData[21])
             };
+        }
+
+        private double GetLatitude(byte b0, byte b1, byte b2, byte b3, byte b4)
+        {
+            string min = $"0.{b1:X2}{b2:X2}{b3:X2}";
+            double latitudeGrad = Double.Parse($"{b0:X2}");
+            double latitudeMin = Double.Parse(min) / 0.6;
+            if (b4 == 06) return latitudeGrad + latitudeMin;
+            else return -latitudeGrad - latitudeMin;
+        }
+
+        private double GetLongitude(byte b0, byte b1, byte b2, byte b3, byte b4)
+        {
+            string grad = $"{b0:X2}{b1:X2}".Substring(0, 3);
+            string minutes = "0."+$"{b1:X2}{b2:X2}{b3:X2}{b4:X2}".Substring(1, 6);
+            double longitudeGrad = Double.Parse(grad);
+            double longitudeMin = Double.Parse(minutes) / 0.6;
+            return (longitudeGrad + longitudeMin) * ((b4 & 0xF) == 0xE ? 1 : -1);
+        }
+        private double GetLatitude(string str, string NS)
+        {
+            string[] data = str.Split('.');
+            double latitudeGrad = Double.Parse(data[0].Substring(0, 2));
+            double latitudeMin = Double.Parse($"0.{data[0].Substring(2, 2)}{data[1]}") / 0.6;
+            return (latitudeGrad + latitudeMin) * (NS == "N" ? 1 : -1);
+        }
+        private double GetLongitude(string str, string WE)
+        {
+            string[] data = str.Split('.');
+            double longitudeGrad = Double.Parse(data[0].Substring(0, 3));
+            double longitudeMin = Double.Parse("0." + data[0].Substring(3, 2) + data[1]) / 0.60;
+            return (longitudeGrad + longitudeMin) * (WE == "E" ? 1 : -1);
         }
 
         private GeoPosition ConvertFromString(string str)
@@ -60,8 +86,8 @@ namespace DataConverters
                     Int32.Parse(data[3].Substring(0, 2)),
                     Int32.Parse(data[3].Substring(2, 2)),
                     Int32.Parse(data[3].Substring(4, 2))).ToLocalTime(),
-                    Latitude = Double.Parse(data[5]),
-                    Longitude = Double.Parse(data[7])
+                    Latitude = GetLatitude(data[5], data[6]),
+                    Longitude = GetLongitude(data[7], data[8])
                 };
             }
 #pragma warning disable CS0168 // Variable is declared but never used

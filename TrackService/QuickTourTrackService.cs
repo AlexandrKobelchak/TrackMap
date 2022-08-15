@@ -1,6 +1,7 @@
 ﻿using DataConverters;
 using Domain;
 using Entities;
+using Microsoft.Extensions.DependencyInjection;
 using System.Net;
 
 namespace TrackService
@@ -11,7 +12,7 @@ namespace TrackService
         private readonly int _port = 1024;
         IDataConverter _converter = new QuickTourConverter();
 
-        public QuickTourTrackService(AppDataContext context) : base(context)
+        public QuickTourTrackService(IServiceScopeFactory factory) : base(factory)
         {
             Addr = _ipAddress;
             Port = _port;
@@ -19,8 +20,12 @@ namespace TrackService
 
         public override void SaveData(byte[] buffer, int received)
         {
-            _context.Set<GeoPosition>().Add(_converter.Convert(buffer, received));
-            _context.SaveChanges();
+            using (var scope = _serviceScopeFactory.CreateScope())
+            {
+                var context = scope.ServiceProvider.GetService<AppDataContext>();
+                context?.Set<GeoPosition>().Add(_converter.Convert(buffer, received));
+                context?.SaveChanges();
+            }
         }
     }
 }

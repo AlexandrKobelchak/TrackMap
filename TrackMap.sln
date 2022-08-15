@@ -3,17 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.32126.317
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrackMap.WebApp", "TrackMap.WebApp\TrackMap.WebApp.csproj", "{BB861977-076C-489B-8E1C-B22791099AB0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrackMap.WebApp", "TrackMap.WebApp\TrackMap.WebApp.csproj", "{BB861977-076C-489B-8E1C-B22791099AB0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "Domain\Domain.csproj", "{D773B5E2-0897-4838-80E0-1AAD81DCA92E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain", "Domain\Domain.csproj", "{D773B5E2-0897-4838-80E0-1AAD81DCA92E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrackService", "TrackService\TrackService.csproj", "{6D12C281-DA01-4C9B-B46B-05F109EFA15A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrackService", "TrackService\TrackService.csproj", "{6D12C281-DA01-4C9B-B46B-05F109EFA15A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libraries", "Libraries", "{7E545235-72AC-4495-8115-0C4CE5954C8D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataConverters", "DataConverters\DataConverters.csproj", "{A19B6ED3-08EC-4F33-B385-7D09D86EF593}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataConverters", "DataConverters\DataConverters.csproj", "{A19B6ED3-08EC-4F33-B385-7D09D86EF593}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Entities", "Entities\Entities.csproj", "{604EC6B3-4CCD-444B-AD05-2973DF15B455}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Entities", "Entities\Entities.csproj", "{604EC6B3-4CCD-444B-AD05-2973DF15B455}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
